@@ -3,6 +3,7 @@ package app.bp1;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,9 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,7 +29,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ActionListener  {
 
 	/**
 	 * 
@@ -35,6 +39,7 @@ public class MainFrame extends JFrame {
 	private JTable table;
 	private static BufferedReader br;
 	
+	private JMenuItem mntmExit;
 	
 	public BufferedReader readDefaultData() {
 		try {
@@ -93,10 +98,45 @@ public class MainFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame() {
+	public MainFrame(){
 		setTitle("Let's learn English! LOOL");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 696, 545);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		mnFile.setMnemonic(KeyEvent.VK_F);
+		menuBar.add(mnFile);
+		
+		JMenuItem mntmCollection = new JMenuItem("New Collection");
+		mntmCollection.setMnemonic(KeyEvent.VK_N);
+		mnFile.add(mntmCollection);
+		
+		JMenuItem mntmOpenCollection = new JMenuItem("Open Collection...");
+		mntmOpenCollection.setMnemonic(KeyEvent.VK_O);
+		mnFile.add(mntmOpenCollection);
+		mnFile.addSeparator();
+		
+		mntmExit = new JMenuItem("Exit");
+		mntmExit.setMnemonic(KeyEvent.VK_X);
+		mnFile.add(mntmExit);
+		mntmExit.addActionListener(this);
+		
+		JMenu mnEdit = new JMenu("Edit");
+		mnEdit.setMnemonic(KeyEvent.VK_E);
+		menuBar.add(mnEdit);
+		
+		JMenu mnHelp = new JMenu("Help");
+		mnHelp.setMnemonic(KeyEvent.VK_H);
+		menuBar.add(mnHelp);
+		
+		JMenuItem mntmHowToUse = new JMenuItem("How to use");
+		mnHelp.add(mntmHowToUse);
+		
+		JMenuItem mntmAboutUs = new JMenuItem("About us");
+		mnHelp.add(mntmAboutUs);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -146,5 +186,15 @@ public class MainFrame extends JFrame {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JMenuItem item = (JMenuItem)e.getSource();
+		if(item == mntmExit) {
+			System.exit(0);
+		}
+		
 	}
 }
