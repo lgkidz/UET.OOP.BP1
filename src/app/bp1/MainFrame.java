@@ -47,6 +47,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 	private JMenuItem mntmCollection;
 	private JMenuItem mntmOpenCollection;
 	
+	//Open new Collection 
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -76,17 +77,20 @@ public class MainFrame extends JFrame implements ActionListener  {
 		});
 	}
 	
+	//Load Main Table
 	private TableModel loadTable() {
 		TableModel dataModel = new DefaultTableModel(loadRowData(),loadColumnNme());
 		table.setModel(dataModel);
 		return dataModel;
 	}
 	
+	//Load main columnNames
 	private Object[] loadColumnNme() {
 		
 		return new Object[] {"English", "Ti\u1EBFng Vi\u1EC7t"};
 	}
 	
+	//Load mainRow
 	private Object[][] loadRowData() {
 		return new Object[][] {};
 	}
@@ -95,7 +99,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 	 * Create the frame.
 	 */
 	public MainFrame(){
-		
+		//SystemUI
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (ClassNotFoundException ex) {
@@ -107,17 +111,22 @@ public class MainFrame extends JFrame implements ActionListener  {
 			} catch (UnsupportedLookAndFeelException ex) {
 			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
 			}
+		//Basic Frame
 		setTitle("Let's learn English! LOOL");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 696, 545);
 		
+		//Menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
+		
+		//File button
 		JMenu mnFile = new JMenu("File");
 		mnFile.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(mnFile);
 		
+		//New Collection menuItem
 		mntmCollection = new JMenuItem("New Collection");
 		mntmCollection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -127,21 +136,25 @@ public class MainFrame extends JFrame implements ActionListener  {
 		mntmCollection.setMnemonic(KeyEvent.VK_N);
 		mnFile.add(mntmCollection);
 		
+		//Open Collection menuItem
 		mntmOpenCollection = new JMenuItem("Open Collection...");
 		mntmOpenCollection.setMnemonic(KeyEvent.VK_O);
 		mnFile.add(mntmOpenCollection);
 		mntmOpenCollection.addActionListener(this);
 		mnFile.addSeparator();
 		
+		//Exit menuItem
 		mntmExit = new JMenuItem("Exit");
 		mntmExit.setMnemonic(KeyEvent.VK_X);
 		mnFile.add(mntmExit);
 		mntmExit.addActionListener(this);
 		
+		//Edit Button
 		JMenu mnEdit = new JMenu("Edit");
 		mnEdit.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(mnEdit);
 		
+		//Help buton
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setMnemonic(KeyEvent.VK_H);
 		menuBar.add(mnHelp);
@@ -157,6 +170,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
+		//Load BeginnerData
 		JButton btnLoadData = new JButton("Load beginner Collection");
 		btnLoadData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -178,6 +192,8 @@ public class MainFrame extends JFrame implements ActionListener  {
 				}
 			}
 		});
+		
+		//Layout
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -198,6 +214,8 @@ public class MainFrame extends JFrame implements ActionListener  {
 						.addComponent(btnLoadData, Alignment.TRAILING)))
 		);
 		
+		
+		//MainTable
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);

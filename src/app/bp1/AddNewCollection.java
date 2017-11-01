@@ -37,6 +37,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 	private JTable table;
 	private JButton btnLu;
 	public AddNewCollection() {
+		//SystemUI
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (ClassNotFoundException ex) {
@@ -48,7 +49,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 			} catch (UnsupportedLookAndFeelException ex) {
 			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
 			}
-		System.out.println("Opened");
+		//System.out.println("Addnew Frame Opened");
 		setTitle("New Collection");
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 574, 395);
@@ -56,17 +57,21 @@ public class AddNewCollection extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		//Name for Collection's title
 		JLabel lblTnBT = new JLabel("T\u00EAn b\u1ED9 t\u1EEB :");
 		
 		cname = new JTextField();
 		cname.setColumns(10);
+		// -------
 		
 		JSeparator separator = new JSeparator();
 		
+		//Add data to the Collection "Them tu va nghia cua tu"
 		JLabel lblThmTV = new JLabel("Th\u00EAm t\u1EEB v\u00E0 ngh\u0129a c\u1EE7a t\u1EEB :");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
+		//Add more row
 		JButton btnThmDng = new JButton("Th\u00EAm d\u00F2ng");
 		btnThmDng.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -75,6 +80,8 @@ public class AddNewCollection extends JFrame implements ActionListener {
 			}
 		});
 		
+		
+		//Reset Button
 		JButton btnXaHt = new JButton("X\u00F3a h\u1EBFt");
 		btnXaHt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -84,9 +91,11 @@ public class AddNewCollection extends JFrame implements ActionListener {
 			}
 		});
 		
+		//Save Button
 		btnLu = new JButton("L\u01B0u l\u1EA1i");
 		btnLu.addActionListener(this);
 		
+		//UI created by Eclipse
 		JLabel error = new JLabel("");
 		error.setForeground(Color.RED);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -145,6 +154,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 					.addContainerGap())
 		);
 		
+		//Table to input data
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
