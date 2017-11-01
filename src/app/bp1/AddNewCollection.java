@@ -176,7 +176,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 			}
 
 			try {
-				PrintWriter writer = new PrintWriter(collectionName + ".dat", "UTF-8");
+				PrintWriter writer = new PrintWriter("data/" + collectionName + ".dat", "UTF-8");
 				for(int i = 0;i<list.size();i++) {
 					String line = list.get(i)[1] + " - " + list.get(i)[0] + " - "+ new Date();
 					writer.println(line);
