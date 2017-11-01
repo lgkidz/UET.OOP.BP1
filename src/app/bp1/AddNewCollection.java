@@ -3,7 +3,9 @@ package app.bp1;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +14,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -23,7 +26,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class AddNewCollection extends JFrame {
+public class AddNewCollection extends JFrame implements ActionListener {
 
 	/**
 	 * 
@@ -32,7 +35,7 @@ public class AddNewCollection extends JFrame {
 	private JPanel contentPane;
 	private JTextField cname;
 	private JTable table;
-
+	private JButton btnLu;
 	public AddNewCollection() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -81,23 +84,8 @@ public class AddNewCollection extends JFrame {
 			}
 		});
 		
-		JButton btnLu = new JButton("L\u01B0u l\u1EA1i");
-		btnLu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String collectionName = cname.getText();
-
-				int rowCount = table.getRowCount();
-				ArrayList<String[]> list = new ArrayList<String[]>();
-				for(int i = 0;i<rowCount;i++) {
-					String word[] = new String[2];
-					word[0] = (String) table.getModel().getValueAt(i, 0);
-					word[1] = (String) table.getModel().getValueAt(i, 1);
-					list.add(word);
-				}
-				
-
-			}
-		});
+		btnLu = new JButton("L\u01B0u l\u1EA1i");
+		btnLu.addActionListener(this);
 		
 		JLabel error = new JLabel("");
 		error.setForeground(Color.RED);
@@ -170,5 +158,38 @@ public class AddNewCollection extends JFrame {
 		
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		
+		JButton buttonPressed = (JButton) e.getSource();
+		if(buttonPressed == btnLu) {
+			String collectionName = cname.getText();
+
+			int rowCount = table.getRowCount();
+			ArrayList<String[]> list = new ArrayList<String[]>();
+			for(int i = 0;i<rowCount;i++) {
+				String word[] = new String[2];
+				word[0] = (String) table.getModel().getValueAt(i, 0);
+				word[1] = (String) table.getModel().getValueAt(i, 1);
+				list.add(word);
+			}
+
+			try {
+				PrintWriter writer = new PrintWriter(collectionName + ".dat", "UTF-8");
+				for(int i = 0;i<list.size();i++) {
+					String line = list.get(i)[1] + " - " + list.get(i)[0] + " - "+ new Date();
+					writer.println(line);
+				}
+				writer.close();
+				JOptionPane.showMessageDialog(null, "New collection " + collectionName + " Created!");
+			}catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "Cannot create file!");
+			}
+			cname.setText("");
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			model.setRowCount(0);
+			this.dispose();
+		}
 	}
 }
