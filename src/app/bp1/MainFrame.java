@@ -15,10 +15,12 @@ import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,16 +37,19 @@ public class MainFrame extends JFrame implements ActionListener  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final int FILE_OPEN = 1;
+	private static final int FILE_SAVE = 2;
 	private JPanel contentPane;
 	private JTable table;
 	private static BufferedReader br;
 	
 	private JMenuItem mntmExit;
 	private JMenuItem mntmCollection;
+	private JMenuItem mntmOpenCollection;
 	
-	public BufferedReader readDefaultData() {
+	public BufferedReader readFileData(File file) {
 		try {
-			File in = new File("beginner.dat");
+			File in = file;
 			br = new BufferedReader(new InputStreamReader(
                     new FileInputStream(in), "UTF8"));
 		}catch (Exception e) {
@@ -122,9 +127,10 @@ public class MainFrame extends JFrame implements ActionListener  {
 		mntmCollection.setMnemonic(KeyEvent.VK_N);
 		mnFile.add(mntmCollection);
 		
-		JMenuItem mntmOpenCollection = new JMenuItem("Open Collection...");
+		mntmOpenCollection = new JMenuItem("Open Collection...");
 		mntmOpenCollection.setMnemonic(KeyEvent.VK_O);
 		mnFile.add(mntmOpenCollection);
+		mntmOpenCollection.addActionListener(this);
 		mnFile.addSeparator();
 		
 		mntmExit = new JMenuItem("Exit");
@@ -151,14 +157,14 @@ public class MainFrame extends JFrame implements ActionListener  {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
-		JButton btnLoadData = new JButton("Load data");
-		btnLoadData.setEnabled(false);
+		JButton btnLoadData = new JButton("Load beginner Collection");
 		btnLoadData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JButton btn = (JButton)arg0.getSource();
 				if(btn == btnLoadData) {
 					DefaultTableModel tbl = (DefaultTableModel) loadTable();
-					BufferedReader buff = readDefaultData();
+					File file = new File("beginner.dat");
+					BufferedReader buff = readFileData(file);
 					String s;
 					try {
 						while((s= buff.readLine())!=null) {
@@ -204,6 +210,48 @@ public class MainFrame extends JFrame implements ActionListener  {
 		if(item == mntmExit) {
 			System.exit(0);
 		}
+		else if(item == mntmOpenCollection) {
+			openFile("Open a Collection", FILE_OPEN);
+		}
+	}
+	
+	public void openFile(String title,int type) {
+		JFileChooser chooser = new JFileChooser();
+		int choose = -1;
+		chooser.setDialogTitle(title);
 		
+		switch(type) {
+		case FILE_OPEN:{
+			choose = chooser.showOpenDialog(null);
+			break;
+		}
+		case FILE_SAVE:{
+			break;
+		}
+		}
+		
+		if(choose == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			switch(type) {
+			case FILE_OPEN:{
+				DefaultTableModel tbl = (DefaultTableModel) loadTable();
+				BufferedReader buff = readFileData(file);
+				String s;
+				try {
+					while((s= buff.readLine())!=null) {
+						String[] parts = s.split(" - ");
+						tbl.addRow(new Object[] {parts[0],parts[1]});
+					}
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "There is something wrong opening this file");
+					e.printStackTrace();
+				}
+				break;
+			}
+			case FILE_SAVE:{
+				break;
+			}
+			}
+		}
 	}
 }
