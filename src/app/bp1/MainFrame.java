@@ -216,6 +216,11 @@ public class MainFrame extends JFrame implements ActionListener  {
 		mnHelp.add(mntmHowToUse);
 		
 		JMenuItem mntmAboutUs = new JMenuItem("About us");
+		mntmAboutUs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new About_us().setVisible(true);
+			}
+		});
 		mnHelp.add(mntmAboutUs);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
