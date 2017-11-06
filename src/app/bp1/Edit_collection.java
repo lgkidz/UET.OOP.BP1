@@ -1,14 +1,15 @@
 package app.bp1;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,11 +18,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class AddNewCollection extends JFrame implements ActionListener {
+public class Edit_collection extends JFrame implements ActionListener {
 
 	/**
 	 * 
@@ -31,7 +36,10 @@ public class AddNewCollection extends JFrame implements ActionListener {
 	private JTextField cname;
 	private JTable table;
 	private JButton btnLu;
-	public AddNewCollection() {
+	private static BufferedReader br;
+	
+	public Edit_collection(String collection_name) {
+		
 		//System.out.println("Addnew Frame Opened");
 		setTitle("New Collection");
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -45,6 +53,8 @@ public class AddNewCollection extends JFrame implements ActionListener {
 		
 		cname = new JTextField();
 		cname.setColumns(10);
+		cname.setEnabled(false);
+		cname.setText(collection_name);
 		// -------
 		
 		JSeparator separator = new JSeparator();
@@ -63,24 +73,9 @@ public class AddNewCollection extends JFrame implements ActionListener {
 			}
 		});
 		
-		
-		//Reset Button
-		JButton btnXaHt = new JButton("Reset");
-		btnXaHt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cname.setText("");
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.setRowCount(0);
-			}
-		});
-		
 		//Save Button
 		btnLu = new JButton("Save");
 		btnLu.addActionListener(this);
-		
-		//UI created by Eclipse
-		JLabel error = new JLabel("");
-		error.setForeground(Color.RED);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -90,21 +85,16 @@ public class AddNewCollection extends JFrame implements ActionListener {
 					.addContainerGap(24, Short.MAX_VALUE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(24)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblThmTV)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(lblTnBT, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(cname, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(error)
-							.addGap(185))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(btnXaHt)
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnLu))
+							.addComponent(lblTnBT)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(cname, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnLu, Alignment.TRAILING)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE)
 									.addGap(26)
@@ -117,8 +107,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTnBT, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(error))
+						.addComponent(cname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -131,23 +120,13 @@ public class AddNewCollection extends JFrame implements ActionListener {
 							.addGap(48)
 							.addComponent(btnThmDng)))
 					.addPreferredGap(ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnXaHt)
-						.addComponent(btnLu))
+					.addComponent(btnLu)
 					.addContainerGap())
 		);
 		
 		//Table to input data
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null},
-			},
-			new String[] {
-				"Ti\u1EBFng Vi\u1EC7t", "English"
-			}
-		));
-		
+		writetabel();
 		
 		scrollPane.setViewportView(table);
 		contentPane.setLayout(gl_contentPane);
@@ -175,14 +154,59 @@ public class AddNewCollection extends JFrame implements ActionListener {
 					writer.println(line);
 				}
 				writer.close();
-				JOptionPane.showMessageDialog(null, "New collection " + collectionName + " Created!");
+				JOptionPane.showMessageDialog(null, "Your change has been saved.");
 			}catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, "Cannot create file!");
+				JOptionPane.showMessageDialog(null, "Cannot edit file!");
 			}
 			cname.setText("");
 			DefaultTableModel model = (DefaultTableModel) table.getModel();
 			model.setRowCount(0);
 			this.dispose();
 		}
+	}
+	
+	public BufferedReader readFileData(File file) {
+		try {
+			File in = file;
+			br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(in), "UTF8"));
+		}catch (Exception e) {
+			System.out.println("Cannot read file!");
+		}
+		return br;
+	}
+	
+	public void writetabel() {
+		File file = new File("data/" + cname.getText() + ".dat");
+		DefaultTableModel tbl = (DefaultTableModel) loadTable();
+		BufferedReader buff = readFileData(file);
+		String s;
+		try {
+			while((s= buff.readLine())!=null) {
+				String[] parts = s.split(" - ");
+				tbl.addRow(new Object[] {parts[0],parts[1]});
+			}
+			buff.close();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "There is something wrong opening this file");
+			e.printStackTrace();
+		}
+	}
+	
+	private TableModel loadTable() {
+		TableModel dataModel = new DefaultTableModel(loadRowData(),loadColumnNme());
+		table.setModel(dataModel);
+		return dataModel;
+	}
+	
+	//Load main columnNames
+	private Object[] loadColumnNme() {
+		
+		return new Object[] {"English", "Ti\u1EBFng Vi\u1EC7t"};
+	}
+	
+	//Load mainRow
+	private Object[][] loadRowData() {
+		return new Object[][] {};
 	}
 }

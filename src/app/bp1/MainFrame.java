@@ -57,7 +57,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 	private JTable table_1;
 	private JMenuItem mntmRename;
 	private JMenuItem mntmMergeCollection;
-	
+	private JMenuItem mntmEdit;
 	//Open new Collection 
 	public BufferedReader readFileData(File file) {
 		try {
@@ -165,6 +165,20 @@ public class MainFrame extends JFrame implements ActionListener  {
 		mnEdit.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(mnEdit);
 		
+		mntmEdit = new JMenuItem("Edit collection...");
+		mntmEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = "";
+				ListSelectionModel collections_model = table_1.getSelectionModel();
+				if(!collections_model.isSelectionEmpty()) {
+				name = (String) table_1.getValueAt(table_1.getSelectedRow(), 0);
+				}
+				new Edit_collection(name).setVisible(true);
+			}
+		});
+		mntmEdit.setEnabled(false);
+		mnEdit.add(mntmEdit);
+		
 		mntmRename = new JMenuItem("Rename...");
 		mntmRename.setEnabled(false);
 		mnEdit.add(mntmRename);
@@ -261,6 +275,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 				if(!collections_model.isSelectionEmpty()) {
 					mntmRename.setEnabled(true);
 					mntmMergeCollection.setEnabled(true);
+					mntmEdit.setEnabled(true);
 					String col_name = (String) table_1.getValueAt(table_1.getSelectedRow(), 0);
 					DefaultTableModel tbl = (DefaultTableModel) loadTable();
 					File file = new File("data/" + col_name + ".dat");
