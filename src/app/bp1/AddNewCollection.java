@@ -58,7 +58,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		
 		//Name for Collection's title
-		JLabel lblTnBT = new JLabel("T\u00EAn b\u1ED9 t\u1EEB :");
+		JLabel lblTnBT = new JLabel("Collection's name :");
 		
 		cname = new JTextField();
 		cname.setColumns(10);
@@ -67,12 +67,12 @@ public class AddNewCollection extends JFrame implements ActionListener {
 		JSeparator separator = new JSeparator();
 		
 		//Add data to the Collection "Them tu va nghia cua tu"
-		JLabel lblThmTV = new JLabel("Th\u00EAm t\u1EEB v\u00E0 ngh\u0129a c\u1EE7a t\u1EEB :");
+		JLabel lblThmTV = new JLabel("Add Words and translations");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
 		//Add more row
-		JButton btnThmDng = new JButton("Th\u00EAm d\u00F2ng");
+		JButton btnThmDng = new JButton("Add row");
 		btnThmDng.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
@@ -82,7 +82,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 		
 		
 		//Reset Button
-		JButton btnXaHt = new JButton("X\u00F3a h\u1EBFt");
+		JButton btnXaHt = new JButton("Reset");
 		btnXaHt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cname.setText("");
@@ -92,7 +92,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 		});
 		
 		//Save Button
-		btnLu = new JButton("L\u01B0u l\u1EA1i");
+		btnLu = new JButton("Save");
 		btnLu.addActionListener(this);
 		
 		//UI created by Eclipse

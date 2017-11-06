@@ -9,12 +9,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -24,12 +24,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JButton;
 
 public class MainFrame extends JFrame implements ActionListener  {
 
@@ -37,6 +41,9 @@ public class MainFrame extends JFrame implements ActionListener  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final File folder = new File("data");
+	
 	private static final int FILE_OPEN = 1;
 	private static final int FILE_SAVE = 2;
 	private JPanel contentPane;
@@ -46,6 +53,9 @@ public class MainFrame extends JFrame implements ActionListener  {
 	private JMenuItem mntmExit;
 	private JMenuItem mntmCollection;
 	private JMenuItem mntmOpenCollection;
+	private JTable table_1;
+	private JMenuItem mntmRename;
+	private JMenuItem mntmMergeCollection;
 	
 	//Open new Collection 
 	public BufferedReader readFileData(File file) {
@@ -114,7 +124,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		//Basic Frame
 		setTitle("Let's learn English! LOOL");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 696, 545);
+		setBounds(100, 100, 780, 552);
 		
 		//Menu
 		JMenuBar menuBar = new JMenuBar();
@@ -154,6 +164,24 @@ public class MainFrame extends JFrame implements ActionListener  {
 		mnEdit.setMnemonic(KeyEvent.VK_E);
 		menuBar.add(mnEdit);
 		
+		mntmRename = new JMenuItem("Rename...");
+		mntmRename.setEnabled(false);
+		mnEdit.add(mntmRename);
+		mntmRename.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String name = "";
+				ListSelectionModel collections_model = table_1.getSelectionModel();
+				if(!collections_model.isSelectionEmpty()) {
+				name = (String) table_1.getValueAt(table_1.getSelectedRow(), 0);
+				}
+				new Rename_collection(name).setVisible(true);
+			}
+		});
+		
+		mntmMergeCollection = new JMenuItem("Merge collections...");
+		mntmMergeCollection.setEnabled(false);
+		mnEdit.add(mntmMergeCollection);
+		
 		//Help buton
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setMnemonic(KeyEvent.VK_H);
@@ -170,14 +198,61 @@ public class MainFrame extends JFrame implements ActionListener  {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
-		//Load BeginnerData
-		JButton btnLoadData = new JButton("Load beginner Collection");
-		btnLoadData.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JButton btn = (JButton)arg0.getSource();
-				if(btn == btnLoadData) {
+		JScrollPane scrollPane_1 = new JScrollPane();
+		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listCollection(folder);
+			}
+		});
+		
+		//Layout
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(290)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(btnRefresh, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(26, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 401, GroupLayout.PREFERRED_SIZE)
+							.addGap(3)
+							.addComponent(btnRefresh))
+						.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 445, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		
+		table_1 = new JTable();
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Collections"
+			}
+		));
+		listCollection(folder);
+		scrollPane_1.setViewportView(table_1);
+		ListSelectionModel collections_model = table_1.getSelectionModel();
+		collections_model.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(!collections_model.isSelectionEmpty()) {
+					mntmRename.setEnabled(true);
+					mntmMergeCollection.setEnabled(true);
+					String col_name = (String) table_1.getValueAt(table_1.getSelectedRow(), 0);
 					DefaultTableModel tbl = (DefaultTableModel) loadTable();
-					File file = new File("beginner.dat");
+					File file = new File("data/" + col_name + ".dat");
 					BufferedReader buff = readFileData(file);
 					String s;
 					try {
@@ -185,35 +260,15 @@ public class MainFrame extends JFrame implements ActionListener  {
 							String[] parts = s.split(" - ");
 							tbl.addRow(new Object[] {parts[0],parts[1]});
 						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						buff.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
 					}
+
 				}
+				
 			}
 		});
-		
-		//Layout
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnLoadData)
-					.addPreferredGap(ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(19, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 445, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addComponent(btnLoadData, Alignment.TRAILING)))
-		);
-		
 		
 		//MainTable
 		table = new JTable();
@@ -230,6 +285,25 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 		else if(item == mntmOpenCollection) {
 			openFile("Open a Collection", FILE_OPEN);
+		}
+	}
+	
+
+	public void listCollection(final File folder) {
+		ArrayList<String> collections = new ArrayList<String>();
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+				listCollection(fileEntry);
+			}
+			else {
+				String name = fileEntry.getName().split("\\.")[0];
+				collections.add(name);
+			}
+		}
+		DefaultTableModel model = (DefaultTableModel) table_1.getModel();
+		model.setRowCount(0);
+		for(String col: collections) {
+			model.addRow(new Object[]{col});
 		}
 	}
 	
