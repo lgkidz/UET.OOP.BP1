@@ -35,6 +35,7 @@ import javax.swing.table.TableModel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 
+
 public class MainFrame extends JFrame implements ActionListener  {
 
 	/**
@@ -179,6 +180,16 @@ public class MainFrame extends JFrame implements ActionListener  {
 		});
 		
 		mntmMergeCollection = new JMenuItem("Merge collections...");
+		mntmMergeCollection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = "";
+				ListSelectionModel collections_model = table_1.getSelectionModel();
+				if(!collections_model.isSelectionEmpty()) {
+				name = (String) table_1.getValueAt(table_1.getSelectedRow(), 0);
+				}
+				new Merge_collection(name).setVisible(true);
+			}
+		});
 		mntmMergeCollection.setEnabled(false);
 		mnEdit.add(mntmMergeCollection);
 		

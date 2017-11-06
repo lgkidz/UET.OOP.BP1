@@ -34,6 +34,7 @@ public class Rename_collection extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Rename_collection(String collection_name) {
+		setTitle("Rename this collection");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 366, 172);
 		contentPane = new JPanel();
