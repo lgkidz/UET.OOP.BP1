@@ -12,9 +12,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -32,8 +29,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 
 public class MainFrame extends JFrame implements ActionListener  {
@@ -125,7 +123,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		//Basic Frame
 		setTitle("Let's learn English! LOOL");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 780, 552);
+		setBounds(100, 100, 650, 450);
 		
 		//Menu
 		JMenuBar menuBar = new JMenuBar();
@@ -227,47 +225,31 @@ public class MainFrame extends JFrame implements ActionListener  {
 		setContentPane(contentPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(301, 11, 323, 368);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(154, 11, 128, 334);
 		
 		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.setBounds(154, 356, 128, 23);
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listCollection(folder);
 			}
 		});
 		
-		//Layout
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(290)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(btnRefresh, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 323, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(26, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 401, GroupLayout.PREFERRED_SIZE)
-							.addGap(3)
-							.addComponent(btnRefresh))
-						.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 445, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
+		JButton btnTodaysNewWords = new JButton("Today's new words!");
+		btnTodaysNewWords.setBounds(15, 22, 129, 23);
+		
+		JButton btnTakeAQuick = new JButton("Take a quick test!");
+		btnTakeAQuick.setBounds(15, 56, 129, 23);
 		
 		table_1 = new JTable();
 		table_1.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"Collections"
+				"My Collections"
 			}
 		));
 		listCollection(folder);
@@ -304,7 +286,29 @@ public class MainFrame extends JFrame implements ActionListener  {
 		//MainTable
 		table = new JTable();
 		scrollPane.setViewportView(table);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(btnRefresh);
+		contentPane.add(btnTakeAQuick);
+		contentPane.add(btnTodaysNewWords);
+		contentPane.add(scrollPane_1);
+		contentPane.add(scrollPane);
+		
+		JLabel lblNewLabel = new JLabel("Let's Learn English\u00A9 2017  ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lblNewLabel.setBounds(10, 365, 112, 14);
+		contentPane.add(lblNewLabel);
+		
+		JButton btnProgress = new JButton("My progress");
+		btnProgress.setBounds(15, 124, 129, 23);
+		contentPane.add(btnProgress);
+		
+		JButton btnLearnFromThis = new JButton("Learn this collection");
+		btnLearnFromThis.setBounds(15, 90, 129, 23);
+		contentPane.add(btnLearnFromThis);
+		
+		JButton btnExportCollection = new JButton("Export Collection");
+		btnExportCollection.setBounds(15, 233, 129, 23);
+		contentPane.add(btnExportCollection);
 	}
 
 
