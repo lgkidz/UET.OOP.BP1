@@ -8,6 +8,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.Window.Type;
 
 public class About_us extends JFrame {
 
@@ -23,6 +24,8 @@ public class About_us extends JFrame {
 	 * Create the frame.
 	 */
 	public About_us() {
+		setType(Type.UTILITY);
+		setResizable(false);
 		setTitle("About us");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 475, 300);

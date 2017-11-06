@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -32,6 +35,7 @@ public class AddNewCollection extends JFrame implements ActionListener {
 	private JTable table;
 	private JButton btnLu;
 	public AddNewCollection() {
+		setResizable(false);
 		//System.out.println("Addnew Frame Opened");
 		setTitle("New Collection");
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -169,9 +173,12 @@ public class AddNewCollection extends JFrame implements ActionListener {
 			}
 
 			try {
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 				PrintWriter writer = new PrintWriter("data/" + collectionName + ".dat", "UTF-8");
 				for(int i = 0;i<list.size();i++) {
-					String line = list.get(i)[1] + " - " + list.get(i)[0] + " - "+ new Date();
+					Date today = Calendar.getInstance().getTime();
+			    	String date = df.format(today);
+					String line = list.get(i)[1] + " - " + list.get(i)[0] + " - "+ date;
 					writer.println(line);
 				}
 				writer.close();

@@ -108,6 +108,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 	 * Create the frame.
 	 */
 	public MainFrame(){
+		setResizable(false);
 		//SystemUI
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -239,9 +240,19 @@ public class MainFrame extends JFrame implements ActionListener  {
 		});
 		
 		JButton btnTodaysNewWords = new JButton("Today's new words!");
+		btnTodaysNewWords.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Today_words().setVisible(true);
+			}
+		});
 		btnTodaysNewWords.setBounds(15, 22, 129, 23);
 		
 		JButton btnTakeAQuick = new JButton("Take a quick test!");
+		btnTakeAQuick.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+			}
+		});
 		btnTakeAQuick.setBounds(15, 56, 129, 23);
 		
 		table_1 = new JTable();
@@ -299,14 +310,29 @@ public class MainFrame extends JFrame implements ActionListener  {
 		contentPane.add(lblNewLabel);
 		
 		JButton btnProgress = new JButton("My progress");
+		btnProgress.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+			}
+		});
 		btnProgress.setBounds(15, 124, 129, 23);
 		contentPane.add(btnProgress);
 		
 		JButton btnLearnFromThis = new JButton("Learn this collection");
+		btnLearnFromThis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+			}
+		});
 		btnLearnFromThis.setBounds(15, 90, 129, 23);
 		contentPane.add(btnLearnFromThis);
 		
 		JButton btnExportCollection = new JButton("Export Collection");
+		btnExportCollection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+			}
+		});
 		btnExportCollection.setBounds(15, 233, 129, 23);
 		contentPane.add(btnExportCollection);
 	}

@@ -71,6 +71,7 @@ public class Merge_collection extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Merge_collection(String collection_name) {
+		setResizable(false);
 		setTitle("Merge 2 collections");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 383, 244);

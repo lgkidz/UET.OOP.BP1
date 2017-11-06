@@ -8,7 +8,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,9 +42,10 @@ public class Edit_collection extends JFrame implements ActionListener {
 	private static BufferedReader br;
 	
 	public Edit_collection(String collection_name) {
+		setResizable(false);
 		
 		//System.out.println("Addnew Frame Opened");
-		setTitle("New Collection");
+		setTitle("Edit Collection");
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 574, 395);
 		contentPane = new JPanel();
@@ -148,9 +152,12 @@ public class Edit_collection extends JFrame implements ActionListener {
 			}
 
 			try {
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 				PrintWriter writer = new PrintWriter("data/" + collectionName + ".dat", "UTF-8");
 				for(int i = 0;i<list.size();i++) {
-					String line = list.get(i)[1] + " - " + list.get(i)[0] + " - "+ new Date();
+					Date today = Calendar.getInstance().getTime();        
+			    	String date = df.format(today);
+					String line = list.get(i)[1] + " - " + list.get(i)[0] + " - "+ date;
 					writer.println(line);
 				}
 				writer.close();
