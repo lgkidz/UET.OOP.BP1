@@ -345,6 +345,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 						String[] parts = s.split(" - ");
 						tbl.addRow(new Object[] {parts[0],parts[1]});
 					}
+					buff.close();
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, "There is something wrong opening this file");
 					e.printStackTrace();
