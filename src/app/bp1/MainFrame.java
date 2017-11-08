@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -242,7 +243,12 @@ public class MainFrame extends JFrame implements ActionListener  {
 		JButton btnTodaysNewWords = new JButton("Today's new words!");
 		btnTodaysNewWords.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Today_words().setVisible(true);
+				try {
+					new Today_words().setVisible(true);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnTodaysNewWords.setBounds(15, 22, 129, 23);

@@ -8,7 +8,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.Window.Type;
 
 public class About_us extends JFrame {
 
