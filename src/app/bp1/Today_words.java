@@ -159,8 +159,7 @@ public class Today_words extends JFrame implements ActionListener {
 	}
 	
 	public void checklearnt() {
-		if(learnt) {
-			currentword = -99;
+		if(learnt && currentword == -1) {
 			JOptionPane.showMessageDialog(null, "You have finished learing today's new words!");
 			this.dispose();
 		}
@@ -181,9 +180,11 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 		catch(Exception e2) {
 			if(currentword > -1) {
-				updateLearntWords();
-				updateWordsTime();
-				updatelastlearndate();
+				if(!learnt) {
+					updateLearntWords();
+					updateWordsTime();
+					updatelastlearndate();
+				}
 				System.out.println("update files");
 				learnt = true;
 			}
@@ -231,7 +232,7 @@ public class Today_words extends JFrame implements ActionListener {
 	
 	public void createWords() {
 		transfer(learntwords, learnt_words);
-		int count = 10;
+		int count = 5;
 		int po = 0;
 		while(count != 0) {
 			System.out.println(po);
@@ -251,6 +252,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 		if(count == 10) {
 			JOptionPane.showMessageDialog(null, "You have learnt all new words!");
+			
 			learnt = true;
 		}
 	}

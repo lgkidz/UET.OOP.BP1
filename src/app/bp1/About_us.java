@@ -39,7 +39,7 @@ public class About_us extends JFrame {
 		
 		JLabel lblThisSmallApp = new JLabel("This small app to help you learn English was originaly developed by a team of 2 members:");
 		
-		JLabel lblNewLabel = new JLabel("Nguy\u1EC5n B\u00ECnh D\u01B0\u01A1ng - MSV");
+		JLabel lblNewLabel = new JLabel("Nguy\u1EC5n B\u00ECnh D\u01B0\u01A1ng - 1600913");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		JLabel lblContactUsAt = new JLabel("Contact us at : letslearnenglish@gmail.com\r\n");

@@ -1,6 +1,7 @@
 package app.bp1;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,10 +12,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -30,9 +35,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import java.awt.Font;
+import javax.swing.JTextField;
 
 
 public class MainFrame extends JFrame implements ActionListener  {
@@ -57,6 +60,11 @@ public class MainFrame extends JFrame implements ActionListener  {
 	private JMenuItem mntmRename;
 	private JMenuItem mntmMergeCollection;
 	private JMenuItem mntmEdit;
+	private JButton btnExportCollection;
+	private JButton btnRevision;
+	private JButton btnTakeAQuick;
+	private JTextField search_field;
+	private JButton btnSearch;
 	//Open new Collection 
 	public BufferedReader readFileData(File file) {
 		try {
@@ -125,7 +133,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		//Basic Frame
 		setTitle("Let's learn English! LOOL");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 650, 450);
+		setBounds(100, 100, 650, 475);
 		
 		//Menu
 		JMenuBar menuBar = new JMenuBar();
@@ -227,13 +235,13 @@ public class MainFrame extends JFrame implements ActionListener  {
 		setContentPane(contentPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(301, 11, 323, 368);
+		scrollPane.setBounds(302, 47, 323, 368);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(154, 11, 128, 334);
+		scrollPane_1.setBounds(154, 47, 128, 334);
 		
 		JButton btnRefresh = new JButton("Refresh");
-		btnRefresh.setBounds(154, 356, 128, 23);
+		btnRefresh.setBounds(154, 392, 128, 23);
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listCollection(folder);
@@ -251,15 +259,25 @@ public class MainFrame extends JFrame implements ActionListener  {
 				}
 			}
 		});
-		btnTodaysNewWords.setBounds(15, 22, 129, 23);
+		btnTodaysNewWords.setBounds(15, 61, 129, 23);
 		
-		JButton btnTakeAQuick = new JButton("Take a quick test!");
+		btnTakeAQuick = new JButton("Take a quick test!");
+		btnTakeAQuick.setEnabled(false);
 		btnTakeAQuick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
 			}
 		});
-		btnTakeAQuick.setBounds(15, 56, 129, 23);
+		btnTakeAQuick.setBounds(15, 95, 129, 23);
+		btnRevision = new JButton("Revision");
+		btnRevision.setEnabled(false);
+		btnRevision.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Revision().setVisible(true);
+			}
+		});
+		btnRevision.setBounds(15, 129, 129, 23);
+		contentPane.add(btnRevision);
 		
 		table_1 = new JTable();
 		table_1.setModel(new DefaultTableModel(
@@ -280,6 +298,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 					mntmRename.setEnabled(true);
 					mntmMergeCollection.setEnabled(true);
 					mntmEdit.setEnabled(true);
+					btnExportCollection.setEnabled(true);
 					String col_name = (String) table_1.getValueAt(table_1.getSelectedRow(), 0);
 					DefaultTableModel tbl = (DefaultTableModel) loadTable();
 					File file = new File("data/" + col_name + ".dat");
@@ -312,41 +331,61 @@ public class MainFrame extends JFrame implements ActionListener  {
 		
 		JLabel lblNewLabel = new JLabel("Let's Learn English\u00A9 2017  ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblNewLabel.setBounds(10, 365, 112, 14);
+		lblNewLabel.setBounds(10, 401, 112, 14);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnProgress = new JButton("My progress");
 		btnProgress.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+				new My_progress().setVisible(true);
 			}
 		});
-		btnProgress.setBounds(15, 124, 129, 23);
+		btnProgress.setBounds(15, 163, 129, 23);
 		contentPane.add(btnProgress);
 		
-		JButton btnLearnFromThis = new JButton("Learn this collection");
-		btnLearnFromThis.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
-			}
-		});
-		btnLearnFromThis.setBounds(15, 90, 129, 23);
-		contentPane.add(btnLearnFromThis);
 		
-		JButton btnExportCollection = new JButton("Export Collection");
+		
+		btnExportCollection = new JButton("Export Collection");
+		btnExportCollection.setEnabled(false);
 		btnExportCollection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
 			}
 		});
-		btnExportCollection.setBounds(15, 233, 129, 23);
+		btnExportCollection.setBounds(15, 326, 129, 23);
 		contentPane.add(btnExportCollection);
+		
+		btnSearch = new JButton("Search");
+		btnSearch.addActionListener(this);
+		btnSearch.setBounds(536, 11, 89, 23);
+		contentPane.add(btnSearch);
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(search_field.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter something in the search bar");
+				}
+				else {
+					String query = search_field.getText();
+					new Search(query).setVisible(true);
+				}
+			}
+		});
+		
+		JLabel lblSearchInWhat = new JLabel("Search in what you have learnt (in English) :\r\n");
+		lblSearchInWhat.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblSearchInWhat.setBounds(15, 15, 255, 14);
+		contentPane.add(lblSearchInWhat);
+		
+		search_field = new JTextField();
+		search_field.setBounds(280, 12, 246, 20);
+		contentPane.add(search_field);
+		search_field.setColumns(10);
 	}
 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JMenuItem item = (JMenuItem)e.getSource();
+		Object item =  e.getSource();
 		if(item == mntmExit) {
 			System.exit(0);
 		}
@@ -355,8 +394,30 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 	}
 	
+	
+	public void can_revision() {
+		File f = new File("learntwords.dat");
+		List<String[]> tmp = new ArrayList<String[]>();
+		BufferedReader buff = readFileData(f);
+		String s;
+		try {
+			while((s= buff.readLine())!=null) {
+				String parts[] = s.split(" - ");
+				tmp.add(parts);
+			}
+			buff.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		if(!tmp.isEmpty()) {
+			btnRevision.setEnabled(true);
+			btnTakeAQuick.setEnabled(true);
+		}
+	}
+	
 
 	public void listCollection(final File folder) {
+		can_revision();
 		ArrayList<String> collections = new ArrayList<String>();
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
