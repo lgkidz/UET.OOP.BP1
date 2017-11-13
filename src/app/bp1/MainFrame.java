@@ -17,7 +17,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -46,16 +45,13 @@ public class MainFrame extends JFrame implements ActionListener  {
 	private static final long serialVersionUID = 1L;
 	
 	private final File folder = new File("data");
-	
-	private static final int FILE_OPEN = 1;
-	private static final int FILE_SAVE = 2;
+
 	private JPanel contentPane;
 	private JTable table;
 	private static BufferedReader br;
 	
 	private JMenuItem mntmExit;
 	private JMenuItem mntmCollection;
-	private JMenuItem mntmOpenCollection;
 	private JTable table_1;
 	private JMenuItem mntmRename;
 	private JMenuItem mntmMergeCollection;
@@ -154,12 +150,6 @@ public class MainFrame extends JFrame implements ActionListener  {
 		});
 		mntmCollection.setMnemonic(KeyEvent.VK_N);
 		mnFile.add(mntmCollection);
-		
-		//Open Collection menuItem
-		mntmOpenCollection = new JMenuItem("Open Collection...");
-		mntmOpenCollection.setMnemonic(KeyEvent.VK_O);
-		mnFile.add(mntmOpenCollection);
-		mntmOpenCollection.addActionListener(this);
 		mnFile.addSeparator();
 		
 		//Exit menuItem
@@ -389,9 +379,6 @@ public class MainFrame extends JFrame implements ActionListener  {
 		if(item == mntmExit) {
 			System.exit(0);
 		}
-		else if(item == mntmOpenCollection) {
-			openFile("Open a Collection", FILE_OPEN);
-		}
 	}
 	
 	
@@ -435,44 +422,4 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 	}
 	
-	public void openFile(String title,int type) {
-		JFileChooser chooser = new JFileChooser();
-		int choose = -1;
-		chooser.setDialogTitle(title);
-		
-		switch(type) {
-		case FILE_OPEN:{
-			choose = chooser.showOpenDialog(null);
-			break;
-		}
-		case FILE_SAVE:{
-			break;
-		}
-		}
-		
-		if(choose == JFileChooser.APPROVE_OPTION) {
-			File file = chooser.getSelectedFile();
-			switch(type) {
-			case FILE_OPEN:{
-				DefaultTableModel tbl = (DefaultTableModel) loadTable();
-				BufferedReader buff = readFileData(file);
-				String s;
-				try {
-					while((s= buff.readLine())!=null) {
-						String[] parts = s.split(" - ");
-						tbl.addRow(new Object[] {parts[0],parts[1]});
-					}
-					buff.close();
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "There is something wrong opening this file");
-					e.printStackTrace();
-				}
-				break;
-			}
-			case FILE_SAVE:{
-				break;
-			}
-			}
-		}
-	}
 }

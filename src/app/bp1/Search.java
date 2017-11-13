@@ -92,9 +92,14 @@ public class Search extends JFrame implements ActionListener {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		for(String[] x:result) {
-			textArea.append(x[0] + "- " + x[1] + "\n");
-			//System.out.println(x[0] + "- " + x[1]);
+		if(result.size()==0) {
+			textArea.append("Sorry, I can't find anything about '" + query + "'");
+		}
+		else {
+			for(String[] x:result) {
+				textArea.append(x[0] + "- " + x[1] + "\n");
+				//System.out.println(x[0] + "- " + x[1]);
+			}
 		}
 	}
 
