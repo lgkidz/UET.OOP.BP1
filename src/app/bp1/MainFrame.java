@@ -255,7 +255,8 @@ public class MainFrame extends JFrame implements ActionListener  {
 		btnTakeAQuick.setEnabled(false);
 		btnTakeAQuick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+				//JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+				new Quick_test().setVisible(true);
 			}
 		});
 		btnTakeAQuick.setBounds(15, 95, 129, 23);
@@ -361,9 +362,9 @@ public class MainFrame extends JFrame implements ActionListener  {
 			}
 		});
 		
-		JLabel lblSearchInWhat = new JLabel("Search in what you have learnt (in English) :\r\n");
+		JLabel lblSearchInWhat = new JLabel("Search in what you have learnt :\r\n");
 		lblSearchInWhat.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblSearchInWhat.setBounds(15, 15, 255, 14);
+		lblSearchInWhat.setBounds(83, 14, 187, 14);
 		contentPane.add(lblSearchInWhat);
 		
 		search_field = new JTextField();

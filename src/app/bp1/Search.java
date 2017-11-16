@@ -97,8 +97,8 @@ public class Search extends JFrame implements ActionListener {
 		}
 		else {
 			for(String[] x:result) {
-				textArea.append(x[0] + "- " + x[1] + "\n");
-				//System.out.println(x[0] + "- " + x[1]);
+				textArea.append(x[0] + " - " + x[1] + "\n");
+				//System.out.println(x[0] + " - " + x[1]);
 			}
 		}
 	}
