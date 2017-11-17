@@ -1,9 +1,5 @@
 package app.bp1;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,9 +8,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class My_progress extends JFrame implements ActionListener {
 
@@ -32,6 +33,7 @@ public class My_progress extends JFrame implements ActionListener {
 	private JLabel last_time;
 	private JLabel goal;
 	private JButton btnOkay;
+	private JLabel percents;
 	/**
 	 * Create the frame.
 	 */
@@ -39,7 +41,7 @@ public class My_progress extends JFrame implements ActionListener {
 		setResizable(false);
 		setTitle("My progress");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 400, 300);
+		setBounds(100, 100, 400, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -86,7 +88,7 @@ public class My_progress extends JFrame implements ActionListener {
 		contentPane.add(last_time);
 		
 		btnOkay = new JButton("Okay");
-		btnOkay.setBounds(285, 227, 89, 23);
+		btnOkay.setBounds(285, 287, 89, 23);
 		contentPane.add(btnOkay);
 		btnOkay.addActionListener(this);
 		
@@ -108,6 +110,16 @@ public class My_progress extends JFrame implements ActionListener {
 		JLabel lblMmddyyyyHhmmss = new JLabel("MM/dd/yyyy HH:mm:ss");
 		lblMmddyyyyHhmmss.setBounds(215, 189, 125, 14);
 		contentPane.add(lblMmddyyyyHhmmss);
+		
+		JLabel lblYourAverageTest = new JLabel("Your average test score :");
+		lblYourAverageTest.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblYourAverageTest.setBounds(10, 230, 185, 26);
+		contentPane.add(lblYourAverageTest);
+		
+		percents = new JLabel("words");
+		percents.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		percents.setBounds(205, 236, 169, 14);
+		contentPane.add(percents);
 		
 		intialize();
 	}
@@ -148,6 +160,18 @@ public class My_progress extends JFrame implements ActionListener {
 			}
 			buff.close();
 			last_time.setText(lasttime);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		buff = readFileData(new File("test_log.dat"));
+		try {
+			float times = Float.parseFloat(buff.readLine());
+			float rights = Float.parseFloat(buff.readLine());
+			float percent = (times!=0)?rights/(5 * times) * 100:0;
+			DecimalFormat df = new DecimalFormat("#.##");
+			percents.setText(df.format(percent) +" %");
+			buff.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

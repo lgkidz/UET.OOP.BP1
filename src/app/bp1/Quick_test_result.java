@@ -4,11 +4,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -18,6 +25,7 @@ public class Quick_test_result extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static BufferedReader br;
 	private JPanel contentPane;
 	private JLabel c1;
 	private JLabel c2;
@@ -192,6 +200,7 @@ public class Quick_test_result extends JFrame implements ActionListener {
 		contentPane.add(comment_field);
 		
 		loadResult(result);
+		
 	}
 	
 	public void loadResult(List<String[]> result) {
@@ -201,6 +210,9 @@ public class Quick_test_result extends JFrame implements ActionListener {
 				right++;
 			}
 		}
+		
+		updateTestLog(right);
+		
 		score.setText("Score: " + right+"/5");
 		
 		if(right == 0) {
@@ -262,6 +274,46 @@ public class Quick_test_result extends JFrame implements ActionListener {
 			u5.setForeground(Color.red);
 		}
 	}
+	
+	public BufferedReader readFileData(File file) {
+		try {
+			File in = file;
+			br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(in), "UTF8"));
+		}catch (Exception e) {
+			System.out.println("Cannot read file!");
+		}
+		return br;
+	}
+	
+	public void updateTestLog(int right) {
+		int times_tried = 0;
+		int rights = 0;
+		BufferedReader buff = readFileData(new File("test_log.dat"));
+		
+		try {
+			String s = "0";
+			s = buff.readLine();
+			times_tried = Integer.parseInt(s);
+			s = buff.readLine();
+			rights = Integer.parseInt(s);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(times_tried + " " + rights);
+		times_tried++;
+		rights = rights + right;
+			try {
+				PrintWriter writer =  new PrintWriter(new File("test_log.dat"), "UTF-8"); 
+				writer.println(times_tried);
+				writer.println(rights);
+				writer.close();
+			}
+			catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, "Cannot create file!");
+			}
+			
+		}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
