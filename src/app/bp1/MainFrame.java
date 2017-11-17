@@ -234,7 +234,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		btnRefresh.setBounds(154, 392, 128, 23);
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				listCollection(folder);
+				refresh();
 			}
 		});
 		
@@ -421,6 +421,10 @@ public class MainFrame extends JFrame implements ActionListener  {
 		for(String col: collections) {
 			model.addRow(new Object[]{col});
 		}
+	}
+	
+	public void refresh() {	
+		listCollection(folder);
 	}
 	
 }

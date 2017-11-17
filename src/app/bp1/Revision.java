@@ -3,6 +3,7 @@ package app.bp1;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -86,6 +87,7 @@ public class Revision extends JFrame implements ActionListener {
 	private int currentword = -1;
 	private boolean learnt = false;
 	private DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+	private JLabel img;
 
 	/**
 	 * Create the frame.
@@ -127,7 +129,7 @@ public class Revision extends JFrame implements ActionListener {
 		v_word.setBounds(286, 124, 188, 14);
 		contentPane.add(v_word);
 		
-		JLabel img = new JLabel(new ImageIcon("images/default.png"));
+		img = new JLabel(new ImageIcon("images/default.png"));
 		img.setAlignmentY(0.0f);
 		img.setPreferredSize(new Dimension(250, 250));
 		panel.add(img);
@@ -140,13 +142,21 @@ public class Revision extends JFrame implements ActionListener {
 		try {
 			if(state == 1) {
 				wordsCount(state);
-				e_word.setText(words_to_r.get(currentword)[0]);
+				String w = words_to_r.get(currentword)[0];
+				e_word.setText(w);
 				v_word.setText(words_to_r.get(currentword)[1]);
+				w = w.substring(0, 1).toUpperCase() + w.substring(1);
+				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/" + w + ".jpg").getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT));
+				img.setIcon(imageIcon);
 			}
 			else if(state == -1) {
 				wordsCount(state);
-				e_word.setText(words_to_r.get(currentword)[0]);
+				String w = words_to_r.get(currentword)[0];
+				e_word.setText(w);
 				v_word.setText(words_to_r.get(currentword)[1]);
+				w = w.substring(0, 1).toUpperCase() + w.substring(1);
+				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/" + w + ".jpg").getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT));
+				img.setIcon(imageIcon);
 			}
 		}
 		catch(Exception e2) {
