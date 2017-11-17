@@ -10,13 +10,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -26,15 +30,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.JTextField;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class MainFrame extends JFrame implements ActionListener  {
@@ -371,6 +380,15 @@ public class MainFrame extends JFrame implements ActionListener  {
 		search_field.setBounds(280, 12, 246, 20);
 		contentPane.add(search_field);
 		search_field.setColumns(10);
+		
+		JButton btnImportCollection = new JButton("Import Collection");
+		btnImportCollection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				importCollection();
+			}
+		});
+		btnImportCollection.setBounds(15, 292, 129, 23);
+		contentPane.add(btnImportCollection);
 	}
 
 
@@ -382,6 +400,86 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 	}
 	
+	public void importCollection() {
+		//JOptionPane.showMessageDialog(null, "Workin on dis!");
+		JFileChooser chooser = new JFileChooser();
+		int select = -1;
+		chooser.setDialogTitle("Import a collection...");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Microsoft Excel Stylesheet 2007 ( *.xlsx)", "xlsx");
+		chooser.setFileFilter(filter);
+		chooser.setAcceptAllFileFilterUsed(false);
+		select  = chooser.showOpenDialog(null);
+		
+		if(select == JFileChooser.APPROVE_OPTION) {
+			//JOptionPane.showMessageDialog(null, "Workin on dis!");
+			File file = chooser.getSelectedFile();
+			POII(file);
+		}
+		refresh();
+	}
+	
+	public void POII(File file) {
+		String filename = file.getName().split("\\.")[0];
+		System.out.println(filename);
+		List<String[]> tmplist = new ArrayList<String[]>();
+		try {
+		    XSSFWorkbook wb = new XSSFWorkbook(file);
+		    XSSFSheet sheet = wb.getSheetAt(0);
+		    XSSFRow row;
+		    XSSFCell cell;
+
+		    int rows; // No of rows
+		    rows = sheet.getPhysicalNumberOfRows();
+
+		    int cols = 0; // No of columns
+		    int tmp = 0;
+
+		    // This trick ensures that we get the data properly even if it doesn't start from first few rows
+		    for(int i = 0; i < 10 || i < rows; i++) {
+		        row = sheet.getRow(i);
+		        if(row != null) {
+		            tmp = sheet.getRow(i).getPhysicalNumberOfCells();
+		            if(tmp > cols) cols = tmp;
+		        }
+		    }
+		    
+		    for(int r = 0; r < rows; r++) {
+		        row = sheet.getRow(r);
+		        if(row != null) {
+		        	String[] parts = new String[3];
+		        	int po = 0;
+		            for(int c = 0; c < cols; c++) {
+		                cell = row.getCell((short)c);
+		                if(cell != null) {
+		                    parts[po] = cell.getStringCellValue();
+		                    po++;
+		                    if(po == 2) {
+		                    	break;
+		                    }
+		                }
+		            }
+		            tmplist.add(parts);
+		        }
+		    }
+		    wb.close();
+		} catch(Exception ioe) {
+		    ioe.printStackTrace();
+		}
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		
+		try {
+			PrintWriter writer = new PrintWriter("data/" + filename + ".dat", "UTF-8");
+			for(int i = 0;i<tmplist.size();i++) {
+				String today = df.format(Calendar.getInstance().getTime());
+				String line = tmplist.get(i)[1] + " - " + tmplist.get(i)[0] + " - "+ today;
+				writer.println(line);
+			}
+			writer.close();
+			JOptionPane.showMessageDialog(null, "New collection " + filename + " is imported!");
+		}catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, "Cannot create file!");
+		}
+	}
 	
 	public void can_revision() {
 		File f = new File("learntwords.dat");
@@ -426,5 +524,4 @@ public class MainFrame extends JFrame implements ActionListener  {
 	public void refresh() {	
 		listCollection(folder);
 	}
-	
 }
