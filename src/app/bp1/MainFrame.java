@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -219,9 +220,6 @@ public class MainFrame extends JFrame implements ActionListener  {
 		mnHelp.setMnemonic(KeyEvent.VK_H);
 		menuBar.add(mnHelp);
 		
-		JMenuItem mntmHowToUse = new JMenuItem("How to use");
-		mnHelp.add(mntmHowToUse);
-		
 		JMenuItem mntmAboutUs = new JMenuItem("About us");
 		mntmAboutUs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -349,7 +347,8 @@ public class MainFrame extends JFrame implements ActionListener  {
 		btnExportCollection.setEnabled(false);
 		btnExportCollection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+				//JOptionPane.showMessageDialog(null, "Sorry! This feature is still in development :(");
+				exportCollection();
 			}
 		});
 		btnExportCollection.setBounds(15, 326, 129, 23);
@@ -413,12 +412,12 @@ public class MainFrame extends JFrame implements ActionListener  {
 		if(select == JFileChooser.APPROVE_OPTION) {
 			//JOptionPane.showMessageDialog(null, "Workin on dis!");
 			File file = chooser.getSelectedFile();
-			POII(file);
+			POI_IN(file);
 		}
 		refresh();
 	}
 	
-	public void POII(File file) {
+	public void POI_IN(File file) {
 		String filename = file.getName().split("\\.")[0];
 		System.out.println(filename);
 		List<String[]> tmplist = new ArrayList<String[]>();
@@ -479,6 +478,85 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}catch (Exception e1) {
 			JOptionPane.showMessageDialog(null, "Cannot create file!");
 		}
+	}
+	
+	public void exportCollection() {
+		String collection_name = "";
+		ListSelectionModel collections_model = table_1.getSelectionModel();
+		if(!collections_model.isSelectionEmpty()) {
+			collection_name = (String) table_1.getValueAt(table_1.getSelectedRow(), 0);
+		}
+		
+		BufferedReader buff = readFileData(new File("data/" + collection_name +".dat"));
+		String s;
+		List<String[]> tmplist = new ArrayList<String[]>();
+		try {
+			while((s= buff.readLine())!=null) {
+				String[] parts = s.split(" - ");
+				tmplist.add(parts);
+			}
+			buff.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		JFileChooser chooser = new JFileChooser();
+		int select = -1;
+		chooser.setDialogTitle("Export this collection as...");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Microsoft Excel Stylesheet 2007 ( *.xlsx)", "xlsx");
+		chooser.setFileFilter(filter);
+		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setSelectedFile(new File(collection_name + ".xlsx"));
+		select  = chooser.showSaveDialog(null);
+		
+		if(select == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			
+			String name = file.getAbsolutePath();
+			System.out.println(name);
+			String parts[] = name.split("\\.");
+			
+			if(!parts[parts.length - 1].equals(".xlsx")) {
+				name = name + ".xlsx";
+				file = new File(name);
+				System.out.println(name);
+			}
+			try {
+				POI_OUT(file,tmplist);
+				JOptionPane.showMessageDialog(null, "Collection exported!");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			refresh();
+		}
+	}
+	
+	public void POI_OUT(File file,List<String[]> list) throws IOException {
+		String excelFileName = file.getAbsolutePath();//name of excel file
+
+		String sheetName = "Sheet1";//name of sheet
+
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(sheetName) ;
+
+		//iterating r number of rows
+		for (int r=0;r < list.size(); r++ )
+		{
+			XSSFRow row = sheet.createRow(r);
+
+			XSSFCell cell0 = row.createCell(0);	
+			cell0.setCellValue(list.get(r)[0]);
+			
+			XSSFCell cell1 = row.createCell(1);	
+			cell1.setCellValue(list.get(r)[1]);
+		}
+
+		FileOutputStream fileOut = new FileOutputStream(excelFileName);
+		//write this workbook to an Outputstream.
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		wb.close();
 	}
 	
 	public void can_revision() {
