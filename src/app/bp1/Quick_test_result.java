@@ -204,9 +204,9 @@ public class Quick_test_result extends JFrame implements ActionListener {
 	}
 	
 	public void loadResult(List<String[]> result) {
-		int right = 0;
+		int right = 0;  //the variable's name is 'right' due to lack of English vocabulary during writing this code
 		for(int i = 0;i<result.size();i++) {
-			if(result.get(i)[1].equals(result.get(i)[2])) {
+			if(result.get(i)[1].equals(result.get(i)[2])) { //count how many answer is correct
 				right++;
 			}
 		}
@@ -275,6 +275,7 @@ public class Quick_test_result extends JFrame implements ActionListener {
 		}
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -286,6 +287,7 @@ public class Quick_test_result extends JFrame implements ActionListener {
 		return br;
 	}
 	
+	//read, edit, write back to the log file
 	public void updateTestLog(int right) {
 		int times_tried = 0;
 		int rights = 0;

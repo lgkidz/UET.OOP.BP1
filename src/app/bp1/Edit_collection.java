@@ -136,6 +136,7 @@ public class Edit_collection extends JFrame implements ActionListener {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
+	//update changes after clicking save button
 	public void actionPerformed(ActionEvent e) {
 		
 		JButton buttonPressed = (JButton) e.getSource();
@@ -172,6 +173,7 @@ public class Edit_collection extends JFrame implements ActionListener {
 		}
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -183,6 +185,7 @@ public class Edit_collection extends JFrame implements ActionListener {
 		return br;
 	}
 	
+	//write data from current collection to the table
 	public void writetabel() {
 		File file = new File("data/" + cname.getText() + ".dat");
 		DefaultTableModel tbl = (DefaultTableModel) loadTable();

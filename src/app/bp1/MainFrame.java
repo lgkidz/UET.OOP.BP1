@@ -54,7 +54,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private final File folder = new File("data");
+	private final File folder = new File("data"); // Folder chua collections
 
 	private JPanel contentPane;
 	private JTable table;
@@ -72,6 +72,8 @@ public class MainFrame extends JFrame implements ActionListener  {
 	private JTextField search_field;
 	private JButton btnSearch;
 	//Open new Collection 
+	
+	//mo file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -184,9 +186,10 @@ public class MainFrame extends JFrame implements ActionListener  {
 				new Edit_collection(name).setVisible(true);
 			}
 		});
+		//edit collection button
 		mntmEdit.setEnabled(false);
 		mnEdit.add(mntmEdit);
-		
+		//rename collection button
 		mntmRename = new JMenuItem("Rename...");
 		mntmRename.setEnabled(false);
 		mnEdit.add(mntmRename);
@@ -201,6 +204,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 			}
 		});
 		
+		//mergeCollection button
 		mntmMergeCollection = new JMenuItem("Merge collections...");
 		mntmMergeCollection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -219,7 +223,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		JMenu mnHelp = new JMenu("Help");
 		mnHelp.setMnemonic(KeyEvent.VK_H);
 		menuBar.add(mnHelp);
-		
+		//about us button
 		JMenuItem mntmAboutUs = new JMenuItem("About us");
 		mntmAboutUs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -290,6 +294,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		ListSelectionModel collections_model = table_1.getSelectionModel();
 		collections_model.addListSelectionListener(new ListSelectionListener() {
 			
+			//check for changes in collections table then write data to main table
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(!collections_model.isSelectionEmpty()) {
@@ -399,6 +404,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 	}
 	
+	//Import collection from excel 2007 or above
 	public void importCollection() {
 		//JOptionPane.showMessageDialog(null, "Workin on dis!");
 		JFileChooser chooser = new JFileChooser();
@@ -416,7 +422,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 		refresh();
 	}
-	
+	//read data from excel file
 	public void POI_IN(File file) {
 		String filename = file.getName().split("\\.")[0];
 		System.out.println(filename);
@@ -480,6 +486,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 	}
 	
+	//export collection to a excel 2007 sheet
 	public void exportCollection() {
 		String collection_name = "";
 		ListSelectionModel collections_model = table_1.getSelectionModel();
@@ -530,7 +537,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 			refresh();
 		}
 	}
-	
+	//write data to excel sheet
 	public void POI_OUT(File file,List<String[]> list) throws IOException {
 		String excelFileName = file.getAbsolutePath();//name of excel file
 
@@ -559,6 +566,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		wb.close();
 	}
 	
+	//check if there is any words to review
 	public void can_revision() {
 		File f = new File("learntwords.dat");
 		List<String[]> tmp = new ArrayList<String[]>();
@@ -579,7 +587,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 	}
 	
-
+	//list a collections available
 	public void listCollection(final File folder) {
 		can_revision();
 		ArrayList<String> collections = new ArrayList<String>();
@@ -599,6 +607,7 @@ public class MainFrame extends JFrame implements ActionListener  {
 		}
 	}
 	
+	//refresh
 	public void refresh() {	
 		listCollection(folder);
 	}

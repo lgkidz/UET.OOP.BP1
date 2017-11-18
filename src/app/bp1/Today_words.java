@@ -147,6 +147,7 @@ public class Today_words extends JFrame implements ActionListener {
 		checklastlearndate();
 	}
 	
+	//check the last time user learn new words
 	public void checklastlearndate() throws ParseException {
 		List<String[]> lastdate = new ArrayList<String[]>();
 		transfer(new File("lastlearndate.date"), lastdate);
@@ -160,6 +161,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 	}
 	
+	//check if user has learned today
 	public void checklearnt() {
 		if(learnt && currentword == -1) {
 			JOptionPane.showMessageDialog(null, "You have finished learing today's new words!");
@@ -167,6 +169,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 	}
 	
+	//show the word
 	public void learn(int state) {
 		try {
 			if(state == 1) {
@@ -200,7 +203,7 @@ public class Today_words extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
+	//as its name
 	public void wordsCount(int state) {
 		if(state == 1) {
 			currentword++;
@@ -231,6 +234,7 @@ public class Today_words extends JFrame implements ActionListener {
 		
 	}
 	
+	//check if the word is learned or not
 	public boolean this_word_is_learnt(String word, List<String[]> list) {
 		for(int i = 0;i<list.size();i++) {
 			if(list.get(i)[0].equals(word)) {
@@ -240,6 +244,7 @@ public class Today_words extends JFrame implements ActionListener {
 		return false;
 	}
 	
+	//create 5 words to learn
 	public void createWords() {
 		transfer(learntwords, learnt_words);
 		int count = 5;
@@ -267,6 +272,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -278,6 +284,7 @@ public class Today_words extends JFrame implements ActionListener {
 		return br;
 	}
 	
+	//read data from a collection file and write to a list
 	public void transfer(File f, List<String[]> words) {
 		BufferedReader buff = readFileData(f);
 		String s;
@@ -292,6 +299,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 	}
 	
+	//list all available collections
 	public List<String> listCollection(final File folder) {
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
@@ -305,6 +313,7 @@ public class Today_words extends JFrame implements ActionListener {
 		return collections;
 	}
 	
+	//load words from all available collections to a list
 	public void loadData() {
 		List<String> collections = listCollection(folder);
 		for(int i = 0;i<collections.size();i++) {
@@ -315,6 +324,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 	}
 	
+	//update time for 5 words just learn
 	public void updateWordsTime() {
 		int left = words_to_learn.size();
 		for(int i = 0;i<collections.size();i++) {
@@ -349,6 +359,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 	}
 	
+	//update the last day user learned
 	public void updatelastlearndate() {
     	String today = df.format(Calendar.getInstance().getTime());
     	List<String[]> tmp = new ArrayList<String[]>();
@@ -366,6 +377,7 @@ public class Today_words extends JFrame implements ActionListener {
 		}
 	}
 	
+	//list those 5 words as learned
 	public void updateLearntWords() {
 		Date today = Calendar.getInstance().getTime();
     	String date = df.format(today);

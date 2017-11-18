@@ -96,6 +96,8 @@ public class Rename_collection extends JFrame implements ActionListener {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
+	
+	//get the new name and rename, no big deal
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		JButton btn = (JButton) arg0.getSource();

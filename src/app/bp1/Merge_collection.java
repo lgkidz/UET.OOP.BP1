@@ -159,6 +159,7 @@ public class Merge_collection extends JFrame implements ActionListener {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
+	//list all available collections for user to select
 	public void listCollection(final File folder) {
 		ArrayList<String> collections = new ArrayList<String>();
 		for (final File fileEntry : folder.listFiles()) {
@@ -175,6 +176,7 @@ public class Merge_collection extends JFrame implements ActionListener {
 		}
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -186,6 +188,7 @@ public class Merge_collection extends JFrame implements ActionListener {
 		return br;
 	}
 	
+	//transfer collection's data from file to a list
 	public void transfer(File f, ArrayList<String> List) {
 		BufferedReader buff = readFileData(f);
 		String s;
@@ -199,6 +202,7 @@ public class Merge_collection extends JFrame implements ActionListener {
 		}
 	}
 	
+	//merge 2 selected collection
 	public void merge(File f1, File f2,String f) {
 		ArrayList<String> List = new ArrayList<String>();
 		transfer(f1, List);
@@ -229,7 +233,7 @@ public class Merge_collection extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "You cannot merge this collection with itself!");
 			}
 			else {
-				if(new_name.getText().equals("")) {
+				if(new_name.getText().equals("")) {//if user doesn't choose a name
 					JOptionPane.showMessageDialog(null, "Please give your new collection a name.");
 				}
 				else {
@@ -237,13 +241,13 @@ public class Merge_collection extends JFrame implements ActionListener {
 					String f1_name = folder + textField.getText() + ".dat";
 					String f2_name =  folder + collection_selected +  ".dat";
 					String final_name =  folder + new_name.getText() + ".dat";
-					if(final_name.equals(f1_name) || final_name.equals(f2_name)){
+					if(final_name.equals(f1_name) || final_name.equals(f2_name)){//if the name is already exist
 						JOptionPane.showMessageDialog(null, "Please give your new collection a different name.");
 					}
 					else {
 						merge(new File(f1_name), new File(f2_name), final_name);
 						
-						if(dont_keep.isSelected()) {
+						if(dont_keep.isSelected()) {//if user chooses not to keep the old collections
 							File f1 = new File(f1_name);
 							f1.delete();
 							File f2 = new File(f2_name);

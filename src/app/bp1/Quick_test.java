@@ -118,6 +118,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		createwords();
 	}
 	
+	//check if the prev is correct
 	public void checkPreviousAnswer() {
 		String selected = "";
 		if(rdbtnAnswer_1.isSelected()) {
@@ -139,6 +140,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		}
 	}
 	
+	//generate random choices
 	public List<String> getQuestionAnswers(String ans, String language) {
 		List<String[]> tmp = new ArrayList<String[]>();
 		for(int i = 0;i<words_to_r.size();i++) {
@@ -163,6 +165,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		return answers;
 	}
 	
+	//get data for the current question
 	public void getQuestion() {
 		
 		String word = "";
@@ -190,6 +193,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		
 	}
 	
+	//get the bloody first question and get the damn whole test to start
 	public void initial() {
 		lblQuestionNumber.setVisible(true);
 		lblX.setVisible(true);
@@ -205,6 +209,8 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		STARTED = true;
 	}
 	
+	
+	//Next question
 	public void Next() {
 		if(STARTED) {
 			checkPreviousAnswer();
@@ -212,6 +218,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		getQuestion();
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -223,6 +230,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		return br;
 	}
 	
+	//get 5 words from the list for the test
 	public void createwords() {
 		int count = 5;
 		for(int i = 0;i<count;i++) {
@@ -231,6 +239,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		}
 	}
 	
+	//read data from collection file and write to a list
 	public void transfer(File f, List<String[]> words) {
 		BufferedReader buff = readFileData(f);
 		String s;
@@ -252,7 +261,7 @@ public class Quick_test extends JFrame implements ActionListener	 {
 		Object x = arg0.getSource();
 		
 		if(x == btnStartNow) {
-			if(!STARTED) {
+			if(!STARTED) { //if haven't started, then start, if started, then next question
 				initial();
 			}
 			else {

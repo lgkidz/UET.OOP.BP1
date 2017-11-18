@@ -67,6 +67,7 @@ public class Search extends JFrame implements ActionListener {
 		do_the_search(q);
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -78,6 +79,7 @@ public class Search extends JFrame implements ActionListener {
 		return br;
 	}
 	
+	//read from those learned words and try to find if there are any matches
 	public void do_the_search(String query) {
 		BufferedReader buff = readFileData(new File("learntwords.dat"));
 		try {

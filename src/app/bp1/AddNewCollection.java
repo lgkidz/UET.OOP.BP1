@@ -157,10 +157,11 @@ public class AddNewCollection extends JFrame implements ActionListener {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
+	//take data from table then write to a new file when user choose save
 	public void actionPerformed(ActionEvent e) {
 		
 		JButton buttonPressed = (JButton) e.getSource();
-		if(buttonPressed == btnLu) {
+		if(buttonPressed == btnLu) { 
 			String collectionName = cname.getText();
 
 			int rowCount = table.getRowCount();

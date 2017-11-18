@@ -138,6 +138,7 @@ public class Revision extends JFrame implements ActionListener {
 		createwords();
 	}
 	
+	//show the current word
 	public void learn(int state) {
 		try {
 			if(state == 1) {
@@ -168,6 +169,7 @@ public class Revision extends JFrame implements ActionListener {
 		}
 	}
 	
+	//get 5 words to learn
 	public void createwords() {
 		int count = 5;
 		for(int i = 0;i<count;i++) {
@@ -175,6 +177,7 @@ public class Revision extends JFrame implements ActionListener {
 		}
 	}
 	
+	//as its name
 	public void wordsCount(int state) {
 		if(state == 1) {
 			currentword++;
@@ -205,6 +208,7 @@ public class Revision extends JFrame implements ActionListener {
 		
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -216,6 +220,7 @@ public class Revision extends JFrame implements ActionListener {
 		return br;
 	}
 	
+	//read data from a collection file and write to a list
 	public void transfer(File f, List<String[]> words) {
 		BufferedReader buff = readFileData(f);
 		String s;
@@ -231,6 +236,7 @@ public class Revision extends JFrame implements ActionListener {
 		Collections.sort(words, new oldest_words());
 	}
 	
+	//update the last time the user learn for those 5 words
 	public void updateWordsTime() {
     	String today = df.format(Calendar.getInstance().getTime());
     	for(int i = 0;i<words_to_r.size();i++) {

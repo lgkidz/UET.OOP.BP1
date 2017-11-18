@@ -20,7 +20,7 @@ public class About_us extends JFrame {
 
 
 	/**
-	 * Create the frame.
+	 * Create the frame. Actually all plain text, nothing to comment
 	 */
 	public About_us() {
 		setType(Type.UTILITY);

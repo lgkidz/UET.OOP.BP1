@@ -124,6 +124,7 @@ public class My_progress extends JFrame implements ActionListener {
 		intialize();
 	}
 	
+	//read file
 	public BufferedReader readFileData(File file) {
 		try {
 			File in = file;
@@ -136,6 +137,8 @@ public class My_progress extends JFrame implements ActionListener {
 	}
 	
 	public void intialize() {
+		
+		//load number of collections, number of words learned
 		BufferedReader buff = readFileData(new File("learntwords.dat"));
 		int noc = listCollection(folder);
 		n_o_c.setText(String.valueOf(noc));
@@ -151,7 +154,7 @@ public class My_progress extends JFrame implements ActionListener {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+		//load the last time user study
 		buff = readFileData(new File("lastlearndate.date"));
 		try {
 			String s;
@@ -164,6 +167,7 @@ public class My_progress extends JFrame implements ActionListener {
 			e1.printStackTrace();
 		}
 		
+		//load data about user tests
 		buff = readFileData(new File("test_log.dat"));
 		try {
 			float times = Float.parseFloat(buff.readLine());
@@ -177,6 +181,7 @@ public class My_progress extends JFrame implements ActionListener {
 		}
 	}
 	
+	//list all available collections
 	public int listCollection(final File folder) {
 		ArrayList<String> collections = new ArrayList<String>();
 		for (final File fileEntry : folder.listFiles()) {
